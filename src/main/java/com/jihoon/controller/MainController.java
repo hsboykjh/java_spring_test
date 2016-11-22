@@ -32,45 +32,15 @@ public class MainController {
     @RequestMapping(path = "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseWordCount countWords(@RequestBody RequestWordCount search) {
 
-        List<String> searchList = search.getSearchText();
-        List wordCountList = new ArrayList<WordCount>();
         ResponseWordCount result = new ResponseWordCount();
 
-        Integer count;
-
-        for(String searchName : searchList){
-            logger.debug("searchName :" +searchName);
-
-            if(wordCountService.getWordCountHashMap().get(searchName.toLowerCase()) == null){
-                count = 0;
-            } else {
-                count = wordCountService.getWordCountHashMap().get(searchName.toLowerCase());
-            }
-
-            wordCountList.add(new WordCount( searchName , count ));
-        }
-
-        result.setCounts(wordCountList);
+        result.setCounts(wordCountService.getWordCountSearch(search.getSearchText()));
         return result;
     }
 
     @RequestMapping(path = "/top/{number}", method = RequestMethod.GET, headers="Accept=text/csv;charset=UTF-8")
     public String countRanks(@PathVariable Integer number) {
 
-        String result = "";
-        Integer index = 0;
-
-        // wordCountHashMap is already sorted hashMap (DESC)
-        for (Map.Entry<String, Integer> entry : wordCountService.getWordCountHashMap().entrySet())
-        {
-            logger.debug(entry.getKey() + " : "+ entry.getValue());
-            result = result + entry.getKey() + "|" + entry.getValue() + "\n";
-            index++;
-
-            //check the total elements
-            if(index >= number)
-                break;
-        }
-        return result;
+        return wordCountService.getWordCountTopRanks(number);
     }
 }

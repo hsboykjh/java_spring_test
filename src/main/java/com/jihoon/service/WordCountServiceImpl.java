@@ -1,6 +1,8 @@
 package com.jihoon.service;
 
 import com.jihoon.config.ApplicationProperties;
+import com.jihoon.model.ResponseWordCount;
+import com.jihoon.model.WordCount;
 import com.jihoon.util.HashMapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +11,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service("WordCountService")
@@ -28,7 +33,70 @@ public class WordCountServiceImpl implements WordCountService{
         this.sortedHashMap = this.initHashMap(this.RowDataFilePath);
     }
 
-    public HashMap<String,Integer> initHashMap(String rowDataFileName) {
+    /**
+     * get WordCount information from hashmap.
+     *
+     * @param searchList word names to find the count in the RowDataFile.
+     * @return wordCountList
+     */
+    public List getWordCountSearch(List<String> searchList) {
+        List wordCountList = new ArrayList<WordCount>();
+        ResponseWordCount result = new ResponseWordCount();
+
+        Integer count;
+
+        for(String searchName : searchList){
+            logger.debug("searchName :" +searchName);
+
+            if(this.getWordCountHashMap().get(searchName.toLowerCase()) == null){
+                count = 0;
+            } else {
+                count = this.getWordCountHashMap().get(searchName.toLowerCase());
+            }
+
+            wordCountList.add(new WordCount( searchName , count ));
+        }
+
+        return wordCountList;
+    }
+
+    /**
+     * get Top # information based on the count-number in the sorted hashmap.
+     *
+     * @param number
+     * @return String
+     */
+    public String getWordCountTopRanks(Integer number) {
+
+        String result = "";
+        Integer index = 0;
+
+        // wordCountHashMap is already sorted hashMap (DESC)
+        for (Map.Entry<String, Integer> entry : this.getWordCountHashMap().entrySet())
+        {
+            logger.debug(entry.getKey() + " : "+ entry.getValue());
+            result = result + entry.getKey() + "|" + entry.getValue() + "\n";
+            index++;
+
+            //check the total elements
+            if(index >= number)
+                break;
+        }
+        return result;
+    }
+
+    /**
+     * Initialize the HashMap.
+     * 1. find and read RowDataFile.
+     * 2. Preprocessing RowDataFile.
+     * 3. Parse the RowDataFile.
+     * 4. Make a hashmap with RowDataFile information ( word name : count number)
+     * 5. Sort the hashmap ( DESC )
+     *
+     * @param rowDataFileName
+     * @return HashMap<String,Integer>
+     */
+    private HashMap<String,Integer> initHashMap(String rowDataFileName) {
 
         HashMap<String,Integer> hashMap = new HashMap<String,Integer>();
 
@@ -74,11 +142,21 @@ public class WordCountServiceImpl implements WordCountService{
         return HashMapUtil.sortByOrder(hashMap, false);
     }
 
+    /**
+     * getWordCountHashMap
+     *
+     * @return HashMap<String,Integer>
+     */
     public HashMap<String,Integer> getWordCountHashMap() {
 
         return this.sortedHashMap;
     }
 
+    /**
+     * getRowDataFilePath
+     *
+     * @return String
+     */
     public String getRowDataFilePath() {
         return RowDataFilePath;
     }

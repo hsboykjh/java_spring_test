@@ -1,7 +1,8 @@
 package com.jihoon.service;
 
-import java.util.HashMap;
+import java.util.List;
 
 public interface WordCountService {
-    public HashMap<String,Integer> getWordCountHashMap();
+    public List getWordCountSearch(List<String> searchList);
+    public String getWordCountTopRanks(Integer number);
 }
