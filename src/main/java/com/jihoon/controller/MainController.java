@@ -1,6 +1,5 @@
 package com.jihoon.controller;
 
-import com.jihoon.model.WordCount;
 import com.jihoon.model.RequestWordCount;
 import com.jihoon.model.ResponseWordCount;
 import com.jihoon.service.WordCountService;
@@ -9,10 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 //Base route path
 @RequestMapping("/counter-api")
