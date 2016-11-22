@@ -16,6 +16,13 @@ public class HashMapUtil
 
     private static final Logger logger = LoggerFactory.getLogger(HashMapUtil.class);
 
+    /**
+     * Sort hashMap ( ASC or DESC )
+     *
+     * @param unsortMap
+     * @param order ( true : ASC , false DESC )
+     * @return
+     */
     public static HashMap<String, Integer> sortByOrder(HashMap<String, Integer> unsortMap, final boolean order)
     {
 
@@ -47,6 +54,11 @@ public class HashMapUtil
         return sortedMap;
     }
 
+    /**
+     * print HashMap information
+     *
+     * @param hashMap
+     */
     public static void printHashMap(HashMap<String, Integer> hashMap)
     {
         for (Entry<String, Integer> entry : hashMap.entrySet())
