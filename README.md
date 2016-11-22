@@ -1,14 +1,21 @@
 # Java Spring Simple RESTful service
 This project's purpose is to build a simple RESTful service.
+
 There are two main RESTful services ( wordCount , Ranks ).
+
 And the services is working with Spring Basic Authentication(Security).
+
 To implement this application, Spring Boot ( Spring light version ) is used.
 
 ## wordCount
 There is a sample paragraphs file, which is including several words.
+
 When application is running, a hashmap is created.
+
 The hashmap's type is <String (word name),  Integer (word count) >, which has count information of all words.
+
 And the hashmap is sorted according to the count Number of the words.
+
 
 If a request of client has some word names, this module returns the word names and counts of the names in the row data file.
 
@@ -21,6 +28,7 @@ If a request of client has some word names, this module returns the word names a
 
 ## Ranks
 This uses same Hashmap, which is created when application is running. 
+
 Since the hashmap has sorted information, it could return the result of the hashmap iterator in order to make top ranks response. 
 
 
@@ -43,6 +51,8 @@ To parse the sample RowData file, it needs several cleansing process before maki
 
 ## Security ( Basic Authentication )
 This application uses Basic Authentication, which is provided by Spring ( Boot ).
+
 To use -H"Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==", b3B0dXM6Y2FuZGlkYXRlcw== is tested to decode in unit test.
+
 And the decoded id and password are using to set Authentication as a 'USER'.
  
